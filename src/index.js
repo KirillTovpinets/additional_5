@@ -6,19 +6,33 @@ module.exports = function check(str, bracketsConfig) {
 		var count = [0, 0];
 		var positions = [[], []];
 		var trigger = 0;
-		for (var j = 0; j < pair.length; j++) {
+		if (pair[0] === pair[1]) {
 			var startPosition = 0;
-			bracket = pair[j];
-			count[trigger] = str.split(bracket).length;
 			while(true){
-				var index = str.indexOf(bracket, startPosition);
+				var index = str.indexOf(pair[0], startPosition);
 				if (index === -1) { break; }
 
 				positions[trigger].push(index);
 				startPosition = index + 1;
+				count[trigger] = count[trigger] + 1;
+				trigger = trigger ? 0 : 1;
 			}
-			trigger = 1;
+		}else{
+			for (var j = 0; j < pair.length; j++) {
+				var startPosition = 0;
+				bracket = pair[j];
+				count[trigger] = str.split(bracket).length;
+				while(true){
+					var index = str.indexOf(bracket, startPosition);
+					if (index === -1) { break; }
+
+					positions[trigger].push(index);
+					startPosition = index + 1;
+				}
+				trigger = 1;
+			}
 		}
+		
 		if (count[0] !== count[1]) {
 			return false;
 		}
